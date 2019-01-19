@@ -37,10 +37,10 @@ The rules for managing the lifetime of an object are:
 
    This occurs in one of two ways:
 
-   -# the object has no shared references and its creator calls its
+   1. the object has no shared references and its creator calls its
       destructor/free procedure
 
-   -# the creator of the object has released the object (remember it does not
+   2. the creator of the object has released the object (remember it does not
       use a bound reference so an unbind is not called by the creator) or called
       its destructor/free procedures while the object is shared, and an unbind
       is called on the last shared object reference. In this case the object's
