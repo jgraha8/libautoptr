@@ -161,7 +161,7 @@ static inline size_t autoptr_num_managed(void *ptr)
  *
  * @param ptr Address of memory managed object
  */
-static inline bool autoptr_destroy(void *ptr)
+static inline bool autoptr_destroy_ok(void *ptr)
 {
         autoptr_assert(ptr);
 

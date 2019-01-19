@@ -69,13 +69,13 @@ Within the mangaged object constructor, we also construct the autoptr member usi
     autoptr_ctor( my_struct, sizeof(*my_struct), (void (*)(void *))my_struct_dtor);
 
 The object destructor is required since it provides all of the internal cleanup
-of the object and will be called by the free procedures. If an object is
-heap-allocated then the allocd flag must be set using
+of the object and is used as a callback function when the managed object is
+destroyed. If an object is heap-allocated then the allocd flag must be set using
  
     autoptr_set_allocd( my_struct, true );
  
-during construction of the object. The object will automatically be free'd when
-*autoptr_unbind()* (or related functions) is called and no more references
+during construction of the object. The object will automatically be freed when
+*autoptr_unbind()* (or similar functions) is called and no more references
 remain. In the case that *my_struct* is a pointer to a contiguous allocation of
 *struct my_struct* objects, a call to
 
@@ -92,7 +92,7 @@ reference count). For our example my_struct, its destructor looks like
  
     void my_struct_dtor( struct my_struct *my_struct )
     {
-            if( ! autoptr_destroy( my_struct ) ) {
+            if( ! autoptr_destroy_ok( my_struct ) ) {
                     autoptr_release( my_struct );
                     return;
             }

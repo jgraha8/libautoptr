@@ -61,7 +61,7 @@ void autoptr_unbind(void **ptr)
         if (AUTOPTR_M(*ptr) == NULL)
                 return;
 
-        if (!autoptr_destroy(*ptr)) {
+        if (!autoptr_destroy_ok(*ptr)) {
                 autoptr_release(*ptr);
                 return;
         }
