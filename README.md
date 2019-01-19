@@ -111,7 +111,7 @@ We adopt the notion that an object has a single creator (primary owner) and thus
 any additional persistent references must be bound to the object in order to
 ensure that the object-lifetime extends to at least the lifetime of the
 reference. The creator is responsible for destroying an object, that is unless
-another object holds a bound reference to the object. In such a case, then the
+another object holds a bound reference to the object. In such a case, the
 creator may release its ownership and responsibilty for cleaning up the object
 and the object will automatically be cleaned up when the last bound reference is
 unbound.
