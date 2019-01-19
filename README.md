@@ -50,9 +50,9 @@ The rules for managing the lifetime of an object are:
 
 ## Conformant Usage
 
-To use the memory management support for an object, we first need to use @c
-autoptr within the managed data structure. The autoptr structure is required to
-be used as the first member of a managed data structure. An example usage is
+To use the memory management support for an object, we first need to use autoptr
+within the managed data structure. The autoptr structure is required to be used
+as the first member of a managed data structure. An example usage is
  
     struct my_struct {
         struct autoptr __autoptr; // Treating as a "private" member
@@ -79,8 +79,8 @@ procedures provided by the autoptr module such that the call then becomes
  		      autoptr_vfree_obj );
  
 If the an object does not use heap or vector (heap) allocation, then the free
-functions may be set to NULL (a free procedure is called only if the @c allocd
-flag is true). The object destructor is required since it provides all of the
+functions may be set to NULL (a free procedure is called only if the allocd flag
+is true). The object destructor is required since it provides all of the
 internal cleanup of the object and will be called by the free procedures. If an
 object is heap-allocated then the allocd flag must be set using
  
@@ -88,7 +88,7 @@ object is heap-allocated then the allocd flag must be set using
  
 during construction of the object. The object destructor, then needs to have as
 the first statement a check for whether or not the object is to be destroyed
-(this is based on the reference count). For our example @c my_struct, its
+(this is based on the reference count). For our example my_struct, its
 destructor looks like
  
     void my_struct_dtor( struct my_struct *my_struct )
