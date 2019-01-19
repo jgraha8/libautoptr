@@ -84,7 +84,7 @@ remain. In the case that *my_struct* is a pointer to a contiguous allocation of
 is needed in order to register each instance of *struct my_struct* in the
 allocation as a managed object.
 
-### Object Destructor
+### Object destructor
 
 The object destructor, then needs to have as the first statement a
 check for whether or not the object is to be destroyed (this is based on the
