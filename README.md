@@ -105,13 +105,6 @@ where if the object still has bound references, then the ownership of the
 calling scope is released to the other references and the object is not
 destroyed, at least until an unbind is performed on the last shared reference.
 
-In the case that *my_struct* is allocated on the heap, one may use the
-*autoptr* free functions
-
-    autoptr_free_obj((void **)my_struct);
-    // or for a contiguous allocation of num_my_struct instances.
-    // autoptr_vfree_obj((void **)my_struct, num_my_struct); 
-
 ## Summary
 
 We adopt the notion that an object has a single creator (primary owner) and thus
