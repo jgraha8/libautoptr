@@ -3,7 +3,7 @@
 ## Overview
 
 The intent of this module is to provide a mechanism for maintaining ownership of
-a shared object. The primary data structure autoptr contains a reference counter
+a shared object. The primary autoptr data structure contains a reference counter
 that indicates how many references (i.e. shared owners, not including the
 creator reference) an object currently has. The reference counter for an object
 begins at zero since we are using the strategy that if a calling procedure
@@ -26,11 +26,11 @@ The rules for managing the lifetime of an object are:
    procedures. This provides consistency in the usage patterns for objects.
 
 - The lifetime of an object can be guaranteed by using a bound reference
-  (e.g. using autoptr_bind).
+  (e.g. using *autoptr_bind()*).
 
    When binding a reference to an object its reference count is
    incremented. Once the object reference is no longer needed it may be unbound
-   using autoptr_unbind or similar procedures.
+   using *autoptr_unbind()* or similar procedures.
 
 - An object may be destroyed only if its reference count is zero upon entry to
   an unbind procedure call or the object's destructor/free procedure call.
@@ -50,45 +50,45 @@ The rules for managing the lifetime of an object are:
 ## Conformant Usage
 
 To use the memory management support for an object, we first need to use autoptr
-within the managed data structure. The autoptr structure is required to be used
-as the first member of a managed data structure. An example usage is
+within the managed data structure.
+
+### Data structure definition
+
+The autoptr structure is required to be used as the first member of a managed
+data structure. An example usage is
  
     struct my_struct {
         struct autoptr __autoptr; // Treating as a "private" member
         ...
     };
+
+### Data structure construction
+
+Within the mangaged object constructor, we also construct the autoptr member using
  
-where the my_struct instance may be cast to autoptr. We use void pointers for
-all of the autoptr procedures and perform this cast internally. When
-constructing the mangaged object we also construct the autoptr member using
- 
-    autoptr_ctor( my_struct, sizeof(*my_struct),
- 		      (void (*)(void *))my_struct_dtor,
- 		      (void (*)(void **))my_struct_free,
- 		      (void (*)(void **, cl_uint))my_struct_vfree );
- 
-where the my_struct_dtor is the object destructor and my_struct_free and
-my_struct_vfree are the free and vector free procedures (for heap allocated
-instances), respectively. In most cases, one can use the generic free and vfree
-procedures provided by the autoptr module such that the call then becomes
- 
-    autoptr_ctor( my_struct, sizeof(*my_struct),
- 		      (void (*)(void *))my_struct_dtor,
- 		      autoptr_free_obj,
- 		      autoptr_vfree_obj );
- 
-If the an object does not use heap or vector (heap) allocation, then the free
-functions may be set to NULL (a free procedure is called only if the allocd flag
-is true). The object destructor is required since it provides all of the
-internal cleanup of the object and will be called by the free procedures. If an
-object is heap-allocated then the allocd flag must be set using
+    autoptr_ctor( my_struct, sizeof(*my_struct), (void (*)(void *))my_struct_dtor);
+
+The object destructor is required since it provides all of the internal cleanup
+of the object and will be called by the free procedures. If an object is
+heap-allocated then the allocd flag must be set using
  
     autoptr_set_allocd( my_struct, true );
  
-during construction of the object. The object destructor, then needs to have as
-the first statement a check for whether or not the object is to be destroyed
-(this is based on the reference count). For our example my_struct, its
-destructor looks like
+during construction of the object. The object will automatically be free'd when
+*autoptr_unbind()* (or related functions) is called and no more references
+remain. In the case that *my_struct* is a pointer to a contiguous allocation of
+*struct my_struct* objects, a call to
+
+    autoptr_set_managed(my_struct, num_my_struct);
+
+is needed in order to register each instance of *struct my_struct* in the
+allocation as a managed object.
+
+### Object Destructor
+
+The object destructor, then needs to have as the first statement a
+check for whether or not the object is to be destroyed (this is based on the
+reference count). For our example my_struct, its destructor looks like
  
     void my_struct_dtor( struct my_struct *my_struct )
     {
@@ -96,6 +96,7 @@ destructor looks like
                     autoptr_release( my_struct );
                     return;
             }
+	    
             // Destroy the internal state otherwise
             ...
     }
