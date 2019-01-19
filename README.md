@@ -1,4 +1,4 @@
-# libautoptr README
+# libautoptr
 
 ## Overview
 
