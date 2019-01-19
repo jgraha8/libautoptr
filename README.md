@@ -33,19 +33,18 @@ The rules for managing the lifetime of an object are:
    using autoptr_unbind or similar procedures.
 
 - An object may be destroyed only if its reference count is zero upon entry to
-     an unbind procedure call or the object's destructor/free procedure call.
+  an unbind procedure call or the object's destructor/free procedure call.
 
-   This occurs in one of two ways:
+  This occurs in one of two ways:
 
-   1. the object has no shared references and its creator calls its
-      destructor/free procedure
+  1. the object has no shared references and its creator calls its
+     destructor/free procedure
 
-   2. the creator of the object has released the object (remember it does not
-      use a bound reference so an unbind is not called by the creator) or called
-      its destructor/free procedures while the object is shared, and an unbind
-      is called on the last shared object reference. In this case the object's
-      destructor/free procedures will be called and the object will be
-      destroyed.
+  2. the creator of the object has released the object (remember it does not use
+     a bound reference so an unbind is not called by the creator) or called its
+     destructor/free procedures while the object is shared, and an unbind is
+     called on the last shared object reference. In this case the object's
+     destructor/free procedures will be called and the object will be destroyed.
 
 
 ## Conformant Usage
