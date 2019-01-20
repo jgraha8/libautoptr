@@ -56,14 +56,14 @@ void autoptr_set_obj(void *ptr, size_t obj_len, void (*obj_dtor)(void *))
 void autoptr_unbind(void **ptr)
 {
         if (*ptr == NULL)
-                return;
+                goto finish;
 
         if (AUTOPTR_M(*ptr) == NULL)
-                return;
+                goto finish;
 
         if (!autoptr_destroy_ok(*ptr)) {
                 autoptr_release(*ptr);
-                return;
+                goto finish;
         }
 
         // The lock shouldn't be needed since all object references have been cleared
@@ -82,34 +82,32 @@ void autoptr_unbind(void **ptr)
                         assert(AUTOPTR(obj)->num_managed == 0);
                 }
 
-                AUTOPTR(obj)->obj_dtor(obj);
+                manager->obj_dtor(obj);
         }
 
         if (allocd) {
                 // We free the manager object
                 free(manager);
         }
+finish:
         *ptr = NULL;
 }
 
 void autoptr_vbindl(void *ptr, size_t size, void *ptr_list[])
 {
-        size_t n;
-        for (n              = 0; n < size; ++n)
+        for (size_t n       = 0; n < size; ++n)
                 ptr_list[n] = autoptr_bind(ptr + AUTOPTR(ptr)->obj_len * n);
 }
 
 void autoptr_lbindl(void *ptr[], size_t size, void *ptr_list[])
 {
-        size_t n;
-        for (n              = 0; n < size; ++n)
+        for (size_t n       = 0; n < size; ++n)
                 ptr_list[n] = autoptr_bind(ptr[n]);
 }
 
 void autoptr_lunbind(void *ptr_list[], size_t size)
 {
-        size_t n;
-        for (n = 0; n < size; ++n)
+        for (size_t n = 0; n < size; ++n)
                 autoptr_unbind(ptr_list + n);
 }
 
@@ -117,7 +115,6 @@ void autoptr_free_obj(void **ptr)
 {
         assert(*ptr != NULL);
         autoptr_unbind(ptr);
-        *ptr = NULL;
 }
 
 void autoptr_vfree_obj(void **ptr, size_t size)
@@ -132,5 +129,4 @@ void autoptr_vfree_obj(void **ptr, size_t size)
         AUTOPTR_M_UNLOCK(*ptr);
 
         autoptr_unbind(ptr);
-        *ptr = NULL;
 }
