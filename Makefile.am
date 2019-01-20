@@ -1,7 +1,7 @@
 ## Makefile.am -- Process this file with automake to produce Makefile.in
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = include src doc
+SUBDIRS = include src tests doc
 SUBLIBS = src/libautoptr_src.la
 
 lib_LTLIBRARIES = libautoptr.la

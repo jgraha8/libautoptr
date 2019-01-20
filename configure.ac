@@ -76,6 +76,7 @@ Makefile			\
 include/Makefile		\
 include/libautoptr/Makefile 	\
 src/Makefile			\
+tests/Makefile			\
 doc/Makefile			\
 ])			
 
