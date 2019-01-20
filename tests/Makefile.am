@@ -1,5 +1,7 @@
 AM_CFLAGS = -I${top_builddir}/include
 
+noinst_HEADERS = test_common.h
+
 check_PROGRAMS = test_autoptr1 test_autoptr2 test_autoptr3 test_autoptr4 test_autoptr5
 test_autoptr1_SOURCES = test_autoptr1.c
 test_autoptr1_LDADD = $(top_builddir)/libautoptr.la
