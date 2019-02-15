@@ -31,6 +31,8 @@
 
 void autoptr_ctor(void *ptr, size_t obj_len, void (*obj_dtor)(void *))
 {
+	assert( obj_len >= sizeof(struct autoptr));
+
         memset(ptr, 0, sizeof(struct autoptr));
 
         AUTOPTR(ptr)->__magic = AUTOPTR_MAGIC;
@@ -45,8 +47,19 @@ void autoptr_dtor(void *ptr)
 {
         autoptr_assert(ptr);
         pthread_mutex_destroy(&AUTOPTR(ptr)->mutex);
+	memset(ptr, 0, sizeof(struct autoptr));
 }
 
+void autoptr_zero_obj(void *ptr)
+{
+	autoptr_assert(ptr);
+	assert( AUTOPTR(ptr)->obj_len >= sizeof(struct autoptr));	
+
+	const size_t zero_len = AUTOPTR(ptr)->obj_len - sizeof(struct autoptr);
+	memset((char *)ptr + sizeof(struct autoptr), 0, zero_len);
+	
+	
+}
 void autoptr_set_obj(void *ptr, size_t obj_len, void (*obj_dtor)(void *))
 {
         AUTOPTR_M(ptr)->obj_len  = obj_len;
@@ -85,6 +98,7 @@ void autoptr_unbind(void **ptr)
                 manager->obj_dtor(obj);
         }
 
+        autoptr_dtor(manager);
         if (allocd) {
                 // We free the manager object
                 free(manager);

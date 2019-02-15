@@ -32,6 +32,8 @@
 #include <assert.h>
 #include <pthread.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,7 +55,6 @@ extern "C" {
                 AUTOPTR_LOCK(ptr);                                                                                \
                 assert(ptr);                                                                                      \
                 const unsigned int __magic = ((struct autoptr *)(ptr))->__magic;                                  \
-                assert(__magic == AUTOPTR_MAGIC);                                                                 \
                 if (__magic != AUTOPTR_MAGIC) {                                                                   \
                         fprintf(stderr, "autoptr_assert_magic: magic = 0x%8x != 0x%8x\n", __magic,                \
                                 AUTOPTR_MAGIC);                                                                   \
@@ -80,13 +81,13 @@ extern "C" {
  */
 struct autoptr {
         unsigned int __magic; ///< Magic number
+        int r_count;          ///< Reference count
         pthread_mutex_t mutex;
-        bool allocd;              ///< Allocation flag; indicates if an object is heap-allocated
-        int r_count;              ///< Reference count
         size_t obj_len;           ///< Length in bytes of managed object
         void (*obj_dtor)(void *); ///< Destructor for the managed object
         struct autoptr *manager;  ///< Manager object of a managed contiguous set (e.g. 1st in vector of objects)
         size_t num_managed;       ///< Number of objects of a managed contiguous set
+        bool allocd;              ///< Allocation flag; indicates if an object is heap-allocated
 };
 
 /**
@@ -108,9 +109,20 @@ void autoptr_ctor(void *ptr, size_t obj_len, void (*obj_dtor)(void *));
 void autoptr_dtor(void *ptr);
 
 /**
+ * @brief Zeros all bytes of the object excluding the autoptr struct
+ *
+ * This is used in place of @c memset() for zeroing all bytes of the
+ * object in order to preserve the state of the (base) autoptr struct
+ * that is managed by libautoptr.
+ *
+ * @param ptr Address of memory managed object
+ */
+void autoptr_zero_obj(void *ptr);
+
+/**
  * @brief Sets the object length and destructor function.
  *
- * Typically used to reasign the object length and destructor for a
+ * Typically used to reassign the object length and destructor for a
  * derived data-structure.
  *
  * @param ptr Address of memory managed object
