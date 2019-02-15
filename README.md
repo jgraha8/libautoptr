@@ -59,6 +59,7 @@ data structure. An example usage is
  
     struct my_struct {
         struct autoptr __autoptr; // Treating as a "private" member
+	int data;
         ...
     };
 

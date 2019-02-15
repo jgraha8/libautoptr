@@ -1,30 +1,30 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include <libautoptr/autoptr.h>
 #include "test_common.h"
+#include <libautoptr/autoptr.h>
 
 int main(int argc, char **argv)
 {
-	struct test t;
-	struct test *p = NULL;
-	
-	test_ctor(&t);
-	p = autoptr_bind(&t);
+        struct test t;
+        struct test *p = NULL;
 
-	assert( ! autoptr_destroy_ok(&t) );
+        test_ctor(&t);
+        p = autoptr_bind(&t);
 
-	// Release ownership of primary test object
-	autoptr_release(&t);
+        assert(!autoptr_destroy_ok(&t));
 
-	// The test object should be destroyable (i.e., single owner)
-	assert( autoptr_destroy_ok(&t) );
+        // Release ownership of primary test object
+        autoptr_release(&t);
 
-	autoptr_unbind((void **)&p);
-	assert( p == NULL );
+        // The test object should be destroyable (i.e., single owner)
+        assert(autoptr_destroy_ok(&t));
 
-	// Ensure that destructor callback was called
-	assert(!test_initd);
+        autoptr_unbind((void **)&p);
+        assert(p == NULL);
 
-	return 0;
+        // Ensure that destructor callback was called
+        assert(!test_initd);
+
+        return 0;
 }

@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 dnl AC_PREREQ([2.59])
-AC_INIT([libautoptr], [0.1.0], [jgraham@compukix.net])
+AC_INIT([libautoptr], [0.2.0], [jgraham@compukix.net])
 
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_HEADERS([config.h])
@@ -36,7 +36,7 @@ dnl Check if Libtool is present
 dnl Libtool is used for building share libraries 
 AC_PROG_LIBTOOL
 
-# Checks for header files.
+# Checks for header files.i
 AC_CHECK_HEADERS([ \
 	assert.h \
 	pthread.h \

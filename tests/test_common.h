@@ -9,7 +9,7 @@ static int test_initd = 0;
 
 struct test {
         struct autoptr __autoptr;
-	int data;
+        int data;
 };
 
 static void test_dtor(struct test *t);
@@ -18,7 +18,7 @@ static void test_ctor(struct test *t)
         autoptr_ctor(t, sizeof(*t), (void (*)(void *))test_dtor);
         ++test_initd;
 
-	t->data = 42;
+        t->data = 42;
 }
 
 static void test_dtor(struct test *t)
