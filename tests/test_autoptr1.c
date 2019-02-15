@@ -6,16 +6,19 @@
 
 int main(int argc, char **argv)
 {
-	struct test *t = test_alloc();
-	struct test *p = autoptr_bind(t);
+	struct test t;
+	struct test *p = NULL;
+	
+	test_ctor(&t);
+	p = autoptr_bind(&t);
 
-	assert( ! autoptr_destroy_ok(t) );
+	assert( ! autoptr_destroy_ok(&t) );
 
 	// Release ownership of primary test object
-	autoptr_release(t);
+	autoptr_release(&t);
 
 	// The test object should be destroyable (i.e., single owner)
-	assert( autoptr_destroy_ok(t) );
+	assert( autoptr_destroy_ok(&t) );
 
 	autoptr_unbind((void **)&p);
 	assert( p == NULL );
