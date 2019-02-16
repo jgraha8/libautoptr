@@ -21,7 +21,7 @@ libautoptr_la_SOURCES =
 #
 # version-info current:revision:age
 #
-libautoptr_la_LDFLAGS=-rpath '$(libdir)' -version-info 2:2:2
+libautoptr_la_LDFLAGS=-rpath '$(libdir)' -version-info 3:3:3
 libautoptr_la_LIBADD = $(SUBLIBS)
 
 pkgincludedir = ${includedir}

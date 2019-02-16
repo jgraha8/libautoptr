@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 dnl AC_PREREQ([2.59])
-AC_INIT([libautoptr], [0.2.0], [jgraham@compukix.net])
+AC_INIT([libautoptr], [0.3.0], [jgraham@compukix.net])
 
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_HEADERS([config.h])
