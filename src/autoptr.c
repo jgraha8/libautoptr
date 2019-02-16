@@ -20,6 +20,7 @@
 #include <libautoptr/autoptr.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define AUTOPTR(a) ((struct autoptr *)(a))
 #define AUTOPTR_LOCK(a) (pthread_mutex_lock(&AUTOPTR(a)->mutex))

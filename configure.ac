@@ -57,7 +57,7 @@ AS_IF([test "x$prefix" = "xNONE"],
       [prefix=$ac_default_prefix],
       [])
 
-#CFLAGS="${CFLAGS} -Wall -std=iso9899:2011"
+CFLAGS="${CFLAGS} -std=c99"
 
 dnl # Documentation generation
 DX_INIT_DOXYGEN([libautoptr],[doxygen/doxygen.cfg],[docs])
