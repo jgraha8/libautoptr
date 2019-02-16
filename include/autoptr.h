@@ -168,6 +168,17 @@ static inline size_t autoptr_num_managed(void *ptr)
         return num_managed;
 }
 
+static inline int autoptr_num_references(void *ptr)
+{
+	autoptr_assert(ptr);
+
+        AUTOPTR_M_LOCK(ptr);
+        int r_count = AUTOPTR_M(ptr)->r_count;
+        AUTOPTR_M_UNLOCK(ptr);
+
+	return r_count;
+}
+
 /**
  * @brief Tests if the object may be destroyed (i.e. the reference count is zero)
  *
