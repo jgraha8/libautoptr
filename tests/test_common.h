@@ -30,6 +30,8 @@ static void test_dtor(struct test *t)
 
         assert(--test_initd >= 0);
         autoptr_zero_obj(t);
+	
+	autoptr_dtor(t);
 }
 
 __attribute__((unused)) static struct test *test_alloc()

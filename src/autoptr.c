@@ -99,7 +99,6 @@ void autoptr_unbind(void **ptr)
                 manager->obj_dtor(obj);
         }
 
-        autoptr_dtor(manager);
         if (allocd) {
                 // We free the manager object
                 free(manager);
