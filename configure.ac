@@ -30,7 +30,7 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 
 dnl Initialize Libtool
-LT_INIT([disable-static])
+LT_INIT
 
 dnl Check if Libtool is present
 dnl Libtool is used for building share libraries 
